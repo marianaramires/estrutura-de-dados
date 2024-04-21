@@ -62,9 +62,6 @@ int insere(hash *Tabela, char *key)
         while (Tabela->Table[pos].valor[0] != '\0' && strcmp(Tabela->Table[pos].valor, "*") != 0)
         {
             pos = (pos + 1) % MAXSIZE;
-
-            if (pos == comeco)
-                return EXIT_FAILURE;
         }
 
         strcpy(Tabela->Table[pos].valor, key);
