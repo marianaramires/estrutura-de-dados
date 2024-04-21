@@ -23,6 +23,14 @@ void inicializa(hash *Tabela)
         Tabela->Table[i].key[0] = '\0';
         Tabela->Table[i].valor[0] = '\0';
     }
+    Tabela->tam = 0;
+}
+
+void print_tabela(hash *Tabela){
+    for(int i=0;i<MAXSIZE;i++){
+        printf("\"%s\" ", Tabela->Table[i].valor);
+    }
+    printf("\n");
 }
 
 int h(char *key)
@@ -51,7 +59,7 @@ int insere(hash *Tabela, char *key)
     }
     else
     {
-        while (Tabela->Table[pos].valor[0] != '\0')
+        while (Tabela->Table[pos].valor[0] != '\0' && strcmp(Tabela->Table[pos].valor, "*") != 0)
         {
             pos = (pos + 1) % MAXSIZE;
 
@@ -87,8 +95,9 @@ int remove_elemento(hash *Tabela, char *key){
     int pos = h(key) % MAXSIZE;
 
     while(Tabela->Table[pos].valor[0] != '\0'){
-        if (strcmp(Tabela->Table[pos].key, key)){
-            strcpy(Tabela->Table[pos].key, '\0');
+        if (strcmp(Tabela->Table[pos].key, key) == 0){
+            strcpy(Tabela->Table[pos].key, "*");
+            strcpy(Tabela->Table[pos].valor, "*");
             Tabela->tam-=1;
             return EXIT_SUCCESS;
         }
@@ -101,14 +110,27 @@ int remove_elemento(hash *Tabela, char *key){
 int main(void){
     hash tabela;
     inicializa(&tabela);
-    insere(&tabela,"abc");
+    
+    insere(&tabela, "abc");
+    print_tabela(&tabela);
+
     insere(&tabela, "bc");
+    print_tabela(&tabela);
+
     insere(&tabela, "bbc");
+    print_tabela(&tabela);
+
     insere(&tabela, "fbc");
-	printf("%d \n", busca(&tabela, "fbc"));
-    printf("%d \n", busca(&tabela, "bcd"));
+    print_tabela(&tabela);
+
+    remove_elemento(&tabela, "abc");
+    print_tabela(&tabela);
+
+    printf("%d\n", busca(&tabela, "fbc"));
+    printf("%d\n", busca(&tabela, "bcd"));
+
     remove_elemento(&tabela, "bbc");
+    print_tabela(&tabela);
 
 	return EXIT_SUCCESS;
-
 }
